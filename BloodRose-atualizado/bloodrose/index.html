@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blood Rose — Moda Gótica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- BARRA DE CARREGAMENTO -->
+  <div id="loadingScreen">
+    <div class="loading-content">
+      <div class="loading-logo">BLOOD ROSE</div>
+      <div class="loading-bar">
+        <div id="loadingProgress"></div>
+      </div>
+      <p>Carregando...</p>
+    </div>
+  </div>
+
+  <!-- ══ CURSOR PERSONALIZADO ══ -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-trail" id="cursorTrail"></div>
+
+  <!-- ══ LOADER ══ -->
+  <div class="loader" id="loader">
+    <div class="loader-cross">
+      <svg viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="0" width="20" height="120" fill="#8b0000"/>
+        <rect x="5" y="28" width="70" height="20" fill="#8b0000"/>
+        <circle cx="40" cy="38" r="6" fill="#cc0000" opacity="0.8"/>
+      </svg>
+    </div>
+    <p class="loader-text font-display">Blood Rose</p>
+  </div>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="nav-logo font-display">
+      <span class="logo-rose">🌹</span> Blood Rose
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#colecao" data-scroll>Coleção</a></li>
+      <li><a href="#categorias" data-scroll>Categorias</a></li>
+      <li><a href="#favoritos" data-scroll>Favoritos <span class="nav-fav-count" id="navFavCount">0</span></a></li>
+      <li><a href="#lookbook" data-scroll>Lookbook</a></li>
+      <li><a href="#contato" data-scroll>Contato</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div class="search-wrap">
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Buscar peças…"
+          autocomplete="off"
+        />
+        <button class="search-icon-btn" id="searchToggle" aria-label="Buscar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="search-clear" id="searchClear" aria-label="Limpar">✕</button>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+      <button class="cart-btn" id="cartToggle" aria-label="Abrir carrinho">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-label">Carrinho</span>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+      <button id="themeBtn" class="theme-btn" type="button" aria-label="Alternar tema">
+        🌙 Tema
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero" id="hero">
+
+    <!-- Crucifixo SVG de fundo -->
+    <div class="cross-bg" aria-hidden="true">
+      <svg class="cross-svg" viewBox="0 0 400 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="crossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#8b0000" stop-opacity="0.18"/>
+            <stop offset="50%" stop-color="#cc0000" stop-opacity="0.28"/>
+            <stop offset="100%" stop-color="#4a0000" stop-opacity="0.1"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- Haste vertical -->
+        <rect x="170" y="20" width="60" height="560" fill="url(#crossGrad)" filter="url(#glow)" rx="2"/>
+        <!-- Haste horizontal -->
+        <rect x="60" y="140" width="280" height="60" fill="url(#crossGrad)" filter="url(#glow)" rx="2"/>
+        <!-- Ornamentos nas pontas -->
+        <circle cx="200" cy="20" r="8" fill="#8b0000" opacity="0.35" filter="url(#glow)"/>
+        <circle cx="200" cy="580" r="8" fill="#8b0000" opacity="0.35" filter="url(#glow)"/>
+        <circle cx="60" cy="170" r="8" fill="#8b0000" opacity="0.35" filter="url(#glow)"/>
+        <circle cx="340" cy="170" r="8" fill="#8b0000" opacity="0.35" filter="url(#glow)"/>
+        <!-- Cruz central decorativa -->
+        <circle cx="200" cy="170" r="20" fill="none" stroke="#8b0000" stroke-width="1.5" opacity="0.4" filter="url(#glow)"/>
+        <circle cx="200" cy="170" r="35" fill="none" stroke="#8b0000" stroke-width="0.8" opacity="0.2"/>
+        <!-- Filamentos decorativos nas pontas -->
+        <line x1="200" y1="2" x2="185" y2="18" stroke="#8b0000" stroke-width="1" opacity="0.25"/>
+        <line x1="200" y1="2" x2="215" y2="18" stroke="#8b0000" stroke-width="1" opacity="0.25"/>
+        <line x1="200" y1="598" x2="185" y2="582" stroke="#8b0000" stroke-width="1" opacity="0.25"/>
+        <line x1="200" y1="598" x2="215" y2="582" stroke="#8b0000" stroke-width="1" opacity="0.25"/>
+        <line x1="42" y1="170" x2="60" y2="155" stroke="#8b0000" stroke-width="1" opacity="0.25"/>
+        <line x1="42" y1="170" x2="60" y2="185" stroke="#8b0000" stroke-width="1" opacity="0.25"/>
+        <line x1="358" y1="170" x2="340" y2="155" stroke="#8b0000" stroke-width="1" opacity="0.25"/>
+        <line x1="358" y1="170" x2="340" y2="185" stroke="#8b0000" stroke-width="1" opacity="0.25"/>
+      </svg>
+
+      <!-- Partículas de gotinhas de sangue -->
+      <div class="blood-drops" id="bloodDrops"></div>
+    </div>
+
+    <div class="hero-photo-side">
+      <div class="hero-img-wrap">
+        <img
+          src="img/morticia.jpg"
+          alt="Vestido gótico em arcada sombria"
+          class="hero-photo"
+        />
+        <div class="hero-img-badge">Nova Coleção</div>
+      </div>
+    </div>
+
+    <div class="hero-text-side">
+      <span class="hero-eyebrow">
+        <span class="eyebrow-line"></span>
+        Outono / Inverno 2026
+        <span class="eyebrow-line"></span>
+      </span>
+      <h1 class="hero-title font-display">
+        Blood<br/><em>Rose</em>
+      </h1>
+      <p class="hero-sub">
+        Vestes forjadas na meia-noite.<br/>
+        Para quem habita o limiar entre dois mundos.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <strong>120+</strong><span>Peças exclusivas</span>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat">
+          <strong>8</strong><span>Categorias sombrias</span>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat">
+          <strong>∞</strong><span>Estilo atemporal</span>
+        </div>
+      </div>
+      <div class="hero-cta">
+        <a href="#colecao" class="btn-primary" data-scroll>Explorar Coleção</a>
+        <a href="#lookbook" class="btn-ghost" data-scroll>Ver Lookbook</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <span>Desça para explorar</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ══ TICKER ══ -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span>🌹 Vestidos</span>
+      <span class="tick-sep">✦</span>
+      <span>☽ Corsets</span>
+      <span class="tick-sep">✦</span>
+      <span>🖤 Saias</span>
+      <span class="tick-sep">✦</span>
+      <span>🌹 Botas Góticas</span>
+      <span class="tick-sep">✦</span>
+      <span>☽ Casacos Nobres</span>
+      <span class="tick-sep">✦</span>
+      <span>🖤 Blusas Rendadas</span>
+      <span class="tick-sep">✦</span>
+      <span>🌹 Vestidos Sombrios</span>
+      <span class="tick-sep">✦</span>
+      <span>☽ Corsets de Veludo</span>
+      <span class="tick-sep">✦</span>
+      <span>🖤 Saias de Couro</span>
+      <span class="tick-sep">✦</span>
+      <span>🌹 Botas Góticas</span>
+      <span class="tick-sep">✦</span>
+      <span>☽ Casacos Nobres</span>
+      <span class="tick-sep">✦</span>
+      <span>🖤 Blusas Rendadas</span>
+      <span class="tick-sep">✦</span>
+    </div>
+  </div>
+
+  <!-- ══ CATEGORIAS ══ -->
+  <section class="categories-section" id="categorias">
+    <div class="container">
+      <div class="section-head">
+        <p class="section-eyebrow">✦ Navegue por categoria</p>
+        <h2 class="section-title font-display">O Guarda-Roupa<br/>das Trevas</h2>
+      </div>
+      <div class="category-bento" id="categoryBento">
+        <div class="cat-card cat-large" data-filter="Vestidos">
+          <img src="img/card vestido.png" alt="Vestidos"/>
+          <div class="cat-overlay"></div>
+          <div class="cat-info">
+            <h3 class="font-heading">Vestidos</h3>
+            <span>24 peças</span>
+          </div>
+          <div class="cat-arrow">→</div>
+        </div>
+        <div class="cat-card" data-filter="Botas">
+          <img src="img/card botas.png" alt="Botas"/>
+          <div class="cat-overlay"></div>
+          <div class="cat-info">
+            <h3 class="font-heading">Botas</h3>
+            <span>18 peças</span>
+          </div>
+          <div class="cat-arrow">→</div>
+        </div>
+        <div class="cat-card" data-filter="Corsets">
+          <img src="img/card corset.png" alt="Corsets"/>
+          <div class="cat-overlay"></div>
+          <div class="cat-info">
+            <h3 class="font-heading">Corsets</h3>
+            <span>12 peças</span>
+          </div>
+          <div class="cat-arrow">→</div>
+        </div>
+        <div class="cat-card" data-filter="Saias">
+          <img src="img/card saias.png" alt="Saias"/>
+          <div class="cat-overlay"></div>
+          <div class="cat-info">
+            <h3 class="font-heading">Saias</h3>
+            <span>9 peças</span>
+          </div>
+          <div class="cat-arrow">→</div>
+        </div>
+        <div class="cat-card" data-filter="Casacos">
+          <img src="img/card casaco.png" alt="Casacos"/>
+          <div class="cat-overlay"></div>
+          <div class="cat-info">
+            <h3 class="font-heading">Casacos</h3>
+            <span>15 peças</span>
+          </div>
+          <div class="cat-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PRODUTOS ══ -->
+  <section class="products-section" id="colecao">
+    <div class="container">
+      <div class="products-head">
+        <div>
+          <p class="section-eyebrow">✦ Nossa coleção</p>
+          <h2 class="section-title font-display">Peças Selecionadas</h2>
+        </div>
+        <div class="filter-bar">
+          <button class="filter-btn active" data-cat="all">Todos</button>
+          <button class="filter-btn" data-cat="Vestidos">Vestidos</button>
+          <button class="filter-btn" data-cat="Botas">Botas</button>
+          <button class="filter-btn" data-cat="Corsets">Corsets</button>
+          <button class="filter-btn" data-cat="Blusas">Blusas</button>
+          <button class="filter-btn" data-cat="Saias">Saias</button>
+          <button class="filter-btn" data-cat="Casacos">Casacos</button>
+        </div>
+      </div>
+
+      <div class="products-grid" id="productsGrid">
+        <!-- Injetado via JS -->
+      </div>
+
+      <div class="no-results hidden" id="noResults">
+        <div class="no-icon">🌹</div>
+        <h3 class="font-heading">Nenhuma peça encontrada</h3>
+        <p>Tente outro termo ou explore nossas categorias.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FAVORITOS ══ -->
+  <section class="favorites-section" id="favoritos">
+    <div class="container">
+      <div class="favorites-head">
+        <div>
+          <p class="section-eyebrow">✦ Sua seleção</p>
+          <h2 class="section-title font-display">Meus Favoritos</h2>
+          <p class="favorites-subtitle">Guarde as peças que você mais deseja.</p>
+        </div>
+        <button class="favorites-clear" id="clearFavorites" type="button">Limpar favoritos</button>
+      </div>
+
+      <div class="products-grid favorites-grid" id="favoritesGrid"></div>
+
+      <div class="favorites-empty" id="favoritesEmpty">
+        <div class="favorites-empty-icon">♡</div>
+        <h3 class="font-heading">Nenhum favorito ainda</h3>
+        <p>Clique no coração das peças para guardá-las aqui.</p>
+        <a href="#colecao" class="btn-primary" data-scroll>Explorar coleção</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LOOKBOOK BANNER ══ -->
+  <section class="lookbook-banner" id="lookbook">
+    <div class="lb-photo-left">
+      <img src="https://images.unsplash.com/photo-1762554559559-151601c39e44?w=700&h=900&fit=crop&auto=format" alt="Lookbook"/>
+    </div>
+    <div class="lb-photo-right">
+      <img src="https://images.unsplash.com/photo-1762554559560-9373311161be?w=700&h=900&fit=crop&auto=format" alt="Lookbook"/>
+    </div>
+    <div class="lb-content">
+      <p class="section-eyebrow">✦ Manifesto Blood Rose</p>
+      <h2 class="lb-quote font-display">
+        "A escuridão não é ausência de luz —<br/>
+        é a <em>luz</em> do abismo."
+      </h2>
+      <a href="#colecao" class="btn-primary" data-scroll>Descubra a Coleção</a>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer" id="contato">
+    <div class="footer-cross" aria-hidden="true">
+      <svg viewBox="0 0 80 120" fill="none">
+        <rect x="30" y="0" width="20" height="120" fill="#8b0000" opacity="0.12"/>
+        <rect x="5" y="28" width="70" height="20" fill="#8b0000" opacity="0.12"/>
+      </svg>
+    </div>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <p class="footer-logo font-display">🌹 Blood Rose</p>
+          <p class="footer-tagline">
+            Moda gótica para almas que encontram<br/>beleza na sombra eterna.
+          </p>
+          <div class="footer-socials">
+            <a href="#" class="soc" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+            </a>
+            <a href="#" class="soc" aria-label="TikTok">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg>
+            </a>
+            <a href="#" class="soc" aria-label="Pinterest">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 00-3.6 19.3c-.1-.9-.2-2.3.1-3.3l1.4-5.9s-.4-.7-.4-1.8c0-1.7 1-3 2.4-3 1.1 0 1.7.8 1.7 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.3.6 2.3 1.9 2.3 2.3 0 3.8-3 3.8-6.5 0-2.7-1.8-4.7-5-4.7a5.6 5.6 0 00-5.8 5.7c0 1 .3 1.8.8 2.3"/></svg>
+            </a>
+            <a href="#" class="soc" aria-label="Email">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4 class="font-heading">Coleção</h4>
+          <ul>
+            <li><a href="#">Vestidos</a></li>
+            <li><a href="#">Corsets</a></li>
+            <li><a href="#">Blusas</a></li>
+            <li><a href="#">Saias de Couro</a></li>
+            <li><a href="#">Casacos de Veludo</a></li>
+            <li><a href="#">Botas</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="font-heading">Informações</h4>
+          <ul>
+            <li><a href="#">Sobre Nós</a></li>
+            <li><a href="#">Lookbook</a></li>
+            <li><a href="#">Guia de Tamanhos</a></li>
+            <li><a href="#">Cuidado com as Peças</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="font-heading">Suporte</h4>
+          <ul>
+            <li><a href="#">Trocas & Devoluções</a></li>
+            <li><a href="#">Envios</a></li>
+            <li><a href="#">Contato</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Blood Rose. Todos os direitos reservados. Crafted in darkness.</p>
+        <p>✦ A moda é efêmera. O gótico é eterno. ✦</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══ CARRINHO SIDEBAR ══ -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-hd">
+      <h2 class="font-heading">Carrinho <span id="cartCount">0</span></h2>
+      <button class="cart-close" id="cartClose">✕</button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <p class="cart-empty-msg">Seu carrinho aguarda na escuridão…</p>
+    </div>
+    <div class="cart-ft" id="cartFt" style="display:none">
+      <div class="cart-total-row">
+        <span class="font-heading">Total</span>
+        <strong id="cartTotal">R$ 0</strong>
+      </div>
+      <button class="btn-checkout font-heading" id="checkoutBtn">Finalizar Compra</button>
+    </div>
+  </aside>
+
+  <!-- ══ CHECKOUT ══ -->
+  <div class="checkout-overlay" id="checkoutOverlay">
+    <div class="checkout-modal">
+
+      <button class="checkout-close" id="checkoutClose">✕</button>
+
+      <p class="section-eyebrow">✦ Finalização</p>
+      <h2 class="font-display">Finalizar Compra</h2>
+      <p class="checkout-subtitle">
+        Preencha seus dados para concluir o pedido.
+      </p>
+
+      <form id="checkoutForm">
+
+        <!-- Nome completo -->
+        <div class="checkout-field">
+          <label for="checkoutName">Nome completo *</label>
+          <input type="text" id="checkoutName"
+                 placeholder="Digite seu nome completo"
+                 maxlength="80" required>
+          <small id="nameError" class="field-error"></small>
+        </div>
+
+        <!-- E-mail -->
+        <div class="checkout-field">
+          <label for="checkoutEmail">E-mail *</label>
+          <input type="email" id="checkoutEmail"
+                 placeholder="exemplo@email.com"
+                 required>
+          <small id="emailError" class="field-error"></small>
+        </div>
+
+        <!-- Telefone -->
+        <div class="checkout-field">
+          <label for="checkoutPhone">Telefone *</label>
+          <input type="tel" id="checkoutPhone"
+                 placeholder="(00) 00000-0000"
+                 maxlength="15" required>
+          <small id="phoneError" class="field-error"></small>
+        </div>
+
+        <!-- CEP -->
+        <div class="checkout-field">
+          <label for="checkoutCep">CEP *</label>
+          <input type="text" id="checkoutCep"
+                 placeholder="00000-000"
+                 maxlength="9" required>
+          <small id="cepError" class="field-error"></small>
+        </div>
+
+        <!-- Endereço -->
+        <div class="checkout-field">
+          <label for="checkoutAddress">Endereço *</label>
+          <input type="text" id="checkoutAddress"
+                 placeholder="Rua, número e bairro"
+                 maxlength="120" required>
+          <small id="addressError" class="field-error"></small>
+        </div>
+
+        <!-- Pagamento -->
+        <div class="checkout-field">
+          <label for="checkoutPayment">Forma de pagamento *</label>
+          <select id="checkoutPayment" required>
+            <option value="">Selecione uma opção</option>
+            <option value="pix">PIX</option>
+            <option value="cartao">Cartão</option>
+            <option value="boleto">Boleto</option>
+          </select>
+          <small id="paymentError" class="field-error"></small>
+        </div>
+
+        <div id="checkoutError" class="checkout-error"></div>
+        <div id="checkoutSuccess" class="checkout-success"></div>
+
+        <button type="submit" class="checkout-submit">
+          Confirmar Pedido
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ TOAST ══ -->
+  <div class="toast" id="toast">
+    <span class="toast-dot"></span>
+    <span id="toastMsg"></span>
+  </div>
+
+  <!-- Modal produto -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-inner" id="modalInner"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

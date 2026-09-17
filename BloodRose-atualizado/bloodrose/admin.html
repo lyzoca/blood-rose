@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blood Rose — Painel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <style>
+    :root{--bg:#090909;--panel:#121212;--panel2:#171717;--line:rgba(139,0,0,.35);--red:#8b0000;--bright:#c40000;--bone:#e7dfd2;--muted:#9d958b;--white:#f5f1ea}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 0%,#1a0a0a 0,#090909 42%,#050505 100%);color:var(--bone);font-family:'EB Garamond',serif;min-height:100vh}
+    body:before{content:'';position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(139,0,0,.04),transparent 30%,transparent 70%,rgba(139,0,0,.04))}
+    .wrap{width:min(1180px,calc(100% - 32px));margin:auto}.top{border-bottom:1px solid var(--line);padding:24px 0;background:rgba(5,5,5,.9);position:sticky;top:0;z-index:10}.top-in{display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-family:'Cinzel Decorative',serif;color:#c40000;font-size:1.25rem}.eyebrow{font-family:Cinzel,serif;color:#c40000;text-transform:uppercase;letter-spacing:.2em;font-size:.7rem}.actions{display:flex;gap:10px;align-items:center}.btn{border:1px solid var(--line);background:#151515;color:var(--bone);padding:11px 16px;font-family:Cinzel,serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.btn:hover{border-color:#c40000}.btn-primary{background:#8b0000;color:#fff;border-color:#8b0000}.btn-danger{color:#ffb2b2}.main{padding:38px 0 70px}.toolbar{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}.title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.5rem,3vw,2.3rem);margin:.25rem 0;color:var(--white)}.sub{color:var(--muted);margin:0}.status{font-size:.9rem;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}.card{background:linear-gradient(145deg,#171717,#0d0d0d);border:1px solid rgba(231,223,210,.08);overflow:hidden}.thumb{aspect-ratio:4/5;background:#0b0b0b;position:relative}.thumb img{width:100%;height:100%;object-fit:cover;display:block}.badge{position:absolute;top:10px;left:10px;background:#8b0000;color:#fff;padding:5px 8px;font:600 .6rem Cinzel,serif;text-transform:uppercase;letter-spacing:.08em}.info{padding:16px}.cat{font:600 .65rem Cinzel,serif;text-transform:uppercase;letter-spacing:.15em;color:#c40000}.name{font:700 1.2rem Cinzel,serif;margin:6px 0}.price{font-size:1.05rem;color:#fff}.old{text-decoration:line-through;color:#777;margin-left:7px}.card-actions{display:flex;gap:8px;margin-top:14px}.card-actions .btn{flex:1}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;padding:20px;z-index:30}.overlay.open{display:flex}.modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:#111;border:1px solid var(--line);box-shadow:0 30px 100px #000;padding:26px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.modal-title{font:700 1.35rem Cinzel,serif}.close{background:none;border:0;color:#fff;font-size:1.4rem;cursor:pointer}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field.full{grid-column:1/-1}.field label{display:block;font:600 .68rem Cinzel,serif;letter-spacing:.12em;text-transform:uppercase;color:#b9afa2;margin-bottom:7px}.field input,.field textarea,.field select{width:100%;background:#080808;border:1px solid rgba(231,223,210,.14);color:#fff;padding:12px;font:1rem 'EB Garamond',serif;outline:none}.field textarea{min-height:120px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:#8b0000}.file-row{display:flex;gap:12px;align-items:center}.preview{width:90px;height:110px;object-fit:cover;border:1px solid var(--line);display:none}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}.login{min-height:100vh;display:grid;place-items:center;padding:20px}.login-card{width:min(420px,100%);background:#111;border:1px solid var(--line);padding:34px;box-shadow:0 30px 100px #000}.login-card h1{font:700 1.6rem 'Cinzel Decorative',serif;color:#c40000;margin:0 0 8px}.login-card p{color:var(--muted)}.error{color:#ff9b9b;min-height:22px}.hidden{display:none!important}@media(max-width:700px){.top-in,.toolbar{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.actions{width:100%}.actions .btn{flex:1}}
+  </style>
+</head>
+<body>
+  <div id="loginView" class="login">
+    <div class="login-card">
+      <div class="eyebrow">✦ Área restrita</div>
+      <h1>Blood Rose</h1>
+      <p>Entre no santuário administrativo para gerenciar sua coleção.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label>E-mail</label>
+          <input id="loginEmail"
+                 type="email"
+                 value="dielle.martins@aluno.edu.pi.gov.br"
+                 required
+                 autocomplete="email"
+                 placeholder="Digite seu e-mail">
+        </div>
+
+        <div class="field" style="margin-top:14px">
+          <label>Senha</label>
+          <input id="loginPassword"
+                 type="password"
+                 required
+                 minlength="8"
+                 autocomplete="current-password"
+                 placeholder="Digite sua senha">
+          <small style="display:block;margin-top:6px;color:#9d958b;">
+            A senha deve possuir pelo menos 8 caracteres.
+          </small>
+          <label style="display:flex;align-items:center;gap:8px;margin-top:10px;color:#9d958b;font-family:Arial,sans-serif;">
+            <input type="checkbox" id="showPassword">
+            Mostrar senha
+          </label>
+        </div>
+        <div id="loginError" class="error" style="margin-top:12px"></div>
+        <div id="loginSuccess"
+             style="color:#9be7a5;min-height:22px;margin-top:8px;">
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-top:8px">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="adminView" class="hidden">
+    <header class="top"><div class="wrap top-in"><div><div class="eyebrow">✦ Painel de produtos</div><div class="brand">🌹 Blood Rose</div></div><div class="actions"><a class="btn" href="index.html">Ver loja</a><button class="btn" id="logoutBtn">Sair</button></div></div></header>
+    <main class="main wrap">
+      <div class="toolbar"><div><div class="eyebrow">Catálogo</div><h2 class="title">Suas peças</h2><p class="sub">Cadastre, edite, publique ou retire produtos sem tocar no código. As imagens são enviadas para o Supabase Storage.</p></div><div><button class="btn btn-primary" id="newProductBtn">＋ Adicionar produto</button></div></div>
+      <div id="status" class="status" style="margin-bottom:16px"></div>
+      <section id="productsGrid" class="grid"></section>
+    </main>
+  </div>
+
+  <div class="overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow">✦ Produto</div><div id="modalTitle" class="modal-title">Novo produto</div></div><button class="close" id="closeModal">✕</button></div>
+      <form id="productForm">
+        <input id="productId" type="hidden">
+        <div class="form-grid">
+          <div class="field"><label>Nome</label><input id="name" required></div>
+          <div class="field"><label>Categoria</label><select id="category" required><option>Vestidos</option><option>Corsets</option><option>Blusas</option><option>Saias</option><option>Casacos</option><option>Botas</option><option>Acessórios</option></select></div>
+          <div class="field"><label>Preço</label><input id="price" type="number" min="0" step="0.01" required></div>
+          <div class="field"><label>Preço antigo</label><input id="oldPrice" type="number" min="0" step="0.01"></div>
+          <div class="field"><label>Etiqueta</label><select id="badge"><option value="">Nenhuma</option><option>Novo</option><option>Exclusivo</option><option>Premium</option><option>Promoção</option><option>-10%</option><option>-20%</option><option>-30%</option></select></div>
+          <div class="field"><label>Ordem</label><input id="sortOrder" type="number" value="0"></div>
+          <div class="field full"><label>Descrição</label><textarea id="description"></textarea></div>
+          <div class="field full"><label>Imagem</label><div class="file-row"><input id="image" type="file" accept="image/*"><img id="preview" class="preview" alt="Prévia"></div></div>
+          <div class="field full"><label>Tamanhos</label><div id="sizes" style="display:flex;gap:8px;flex-wrap:wrap"><label><input type="checkbox" value="XS" checked> XS</label><label><input type="checkbox" value="S" checked> S</label><label><input type="checkbox" value="M" checked> M</label><label><input type="checkbox" value="G" checked> G</label><label><input type="checkbox" value="GG" checked> GG</label></div></div>
+          <div class="field full"><label>Status</label><select id="active"><option value="true">Publicado</option><option value="false">Rascunho</option></select></div>
+        </div>
+        <div id="formError" class="error" style="margin-top:14px"></div>
+        <div class="form-actions"><button type="button" class="btn" id="cancelBtn">Cancelar</button><button class="btn btn-primary" id="saveBtn">Salvar produto</button></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+    const cfg = window.BLOODROSE_SUPABASE || {};
+    const ready = window.supabase?.createClient && cfg.url && cfg.anonKey && !cfg.url.includes('COLE_AQUI') && !cfg.anonKey.includes('COLE_AQUI');
+    const client = ready ? window.supabase.createClient(cfg.url, cfg.anonKey) : null;
+    let products = [];
+    let editing = null;
+
+    const $ = id => document.getElementById(id);
+    const money = n => Number(n || 0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+    const escapeHtml = s => String(s ?? '').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+
+    function setStatus(msg, error=false){ $('status').textContent=msg; $('status').style.color=error?'#ff9b9b':'#9d958b'; }
+    function requireClient(){ if(!client) throw new Error('Configure primeiro o supabase-config.js.'); }
+
+    async function isAdmin(){
+      requireClient();
+      const {data:{user}}=await client.auth.getUser();
+      if(!user) return false;
+      const {data,error}=await client.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();
+      if(error) throw error;
+      return !!data;
+    }
+
+    async function boot(){
+      if(!ready){ $('loginError').textContent='Configure a URL e a chave do Supabase em supabase-config.js.'; return; }
+      const {data:{session}}=await client.auth.getSession();
+      if(session && await isAdmin()) showAdmin(); else showLogin();
+      client.auth.onAuthStateChange(async (_event, session)=>{ if(session && await isAdmin()) showAdmin(); else showLogin(); });
+    }
+
+    function showLogin(){ $('loginView').classList.remove('hidden'); $('adminView').classList.add('hidden'); }
+    async function showAdmin(){ $('loginView').classList.add('hidden'); $('adminView').classList.remove('hidden'); await loadProducts(); }
+
+    $('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const email = $('loginEmail').value.trim();
+      const senha = $('loginPassword').value;
+
+      $('loginError').textContent = '';
+      $('loginSuccess').textContent = '';
+
+      // Validação do e-mail
+      if (!email) {
+        $('loginError').textContent = 'Digite seu endereço de e-mail.';
+        return;
+      }
+
+      if (!email.includes('@')) {
+        $('loginError').textContent = 'Digite um endereço de e-mail válido.';
+        return;
+      }
+
+      // Validação da senha
+      if (!senha) {
+        $('loginError').textContent = 'Digite sua senha.';
+        return;
+      }
+
+      if (senha.length < 8) {
+        $('loginError').textContent =
+          'A senha precisa possuir pelo menos 8 caracteres.';
+        return;
+      }
+
+      $('loginError').textContent = 'Entrando…';
+
+      try {
+        requireClient();
+
+        const { error } = await client.auth.signInWithPassword({
+          email,
+          password: senha
+        });
+
+        if (error) throw error;
+
+        const ok = await isAdmin();
+
+        if (!ok) {
+          await client.auth.signOut();
+          throw new Error(
+            'Este usuário não está autorizado como administrador.'
+          );
+        }
+
+        $('loginError').textContent = '';
+        $('loginSuccess').textContent =
+          'Login realizado com sucesso! Entrando no painel…';
+
+        setTimeout(() => {
+          showAdmin();
+        }, 800);
+
+      } catch (err) {
+        $('loginError').textContent =
+          'Não foi possível entrar. Verifique seu e-mail e sua senha.';
+        console.error(err);
+      }
+    });
+
+    $('showPassword').addEventListener('change', () => {
+      $('loginPassword').type =
+        $('showPassword').checked ? 'text' : 'password';
+    });
+
+    $('logoutBtn').addEventListener('click',async()=>{await client.auth.signOut();showLogin();});
+
+    async function loadProducts(){
+      setStatus('Carregando catálogo…');
+      const {data,error}=await client.from('products').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
+      if(error){setStatus(error.message,true);return;}
+      products=data||[]; renderProducts(); setStatus(`${products.length} produto(s) no catálogo.`);
+    }
+
+    function renderProducts(){
+      $('productsGrid').innerHTML=products.map(p=>`<article class="card"><div class="thumb"><img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}">${p.badge?`<span class="badge">${escapeHtml(p.badge)}</span>`:''}</div><div class="info"><div class="cat">${escapeHtml(p.category)}</div><div class="name">${escapeHtml(p.name)}</div><div class="price">${money(p.price)}${p.old_price?`<span class="old">${money(p.old_price)}</span>`:''}</div><div class="card-actions"><button class="btn" data-edit="${p.id}">Editar</button><button class="btn btn-danger" data-delete="${p.id}">Excluir</button></div></div></article>`).join('');
+      $('productsGrid').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openForm(products.find(p=>String(p.id)===b.dataset.edit)));
+      $('productsGrid').querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteProduct(b.dataset.delete));
+    }
+
+    function resetSizes(sizes=['XS','S','M','G','GG']){ $('sizes').querySelectorAll('input').forEach(i=>i.checked=sizes.includes(i.value)); }
+    function openForm(p=null){
+      editing=p; $('formError').textContent=''; $('modalOverlay').classList.add('open'); $('modalTitle').textContent=p?'Editar produto':'Novo produto';
+      $('productId').value=p?.id||''; $('name').value=p?.name||''; $('category').value=p?.category||'Vestidos'; $('price').value=p?.price??''; $('oldPrice').value=p?.old_price??''; $('badge').value=p?.badge||''; $('sortOrder').value=p?.sort_order??0; $('description').value=p?.description||''; $('active').value=String(p?.active ?? true); $('image').value=''; $('preview').style.display=p?.image_url?'block':'none'; $('preview').src=p?.image_url||''; resetSizes(p?.sizes||['XS','S','M','G','GG']);
+    }
+    function closeForm(){ $('modalOverlay').classList.remove('open'); editing=null; }
+    $('newProductBtn').onclick=()=>openForm(); $('closeModal').onclick=closeForm; $('cancelBtn').onclick=closeForm; $('modalOverlay').onclick=e=>{if(e.target===$('modalOverlay'))closeForm()};
+    $('image').onchange=()=>{const f=$('image').files[0];if(f){$('preview').src=URL.createObjectURL(f);$('preview').style.display='block';}};
+
+    async function uploadImage(file){
+      if(!file) return null;
+      const safe=file.name.toLowerCase().replace(/[^a-z0-9._-]+/g,'-'); const path=`${crypto.randomUUID()}-${safe}`;
+      const {error}=await client.storage.from('products').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});
+      if(error) throw error;
+      return client.storage.from('products').getPublicUrl(path).data.publicUrl;
+    }
+
+    $('productForm').addEventListener('submit',async e=>{
+      e.preventDefault(); $('formError').textContent=''; $('saveBtn').disabled=true; $('saveBtn').textContent='Salvando…';
+      try{
+        const sizes=[...$('sizes').querySelectorAll('input:checked')].map(i=>i.value); if(!sizes.length) throw new Error('Selecione ao menos um tamanho.');
+        const file=$('image').files[0]; let imageUrl=editing?.image_url||''; if(file) imageUrl=await uploadImage(file); if(!imageUrl) throw new Error('Escolha uma imagem para o produto.');
+        const payload={name:$('name').value.trim(),category:$('category').value,price:Number($('price').value),old_price:$('oldPrice').value?Number($('oldPrice').value):null,badge:$('badge').value||null,description:$('description').value.trim(),image_url:imageUrl,sizes,active:$('active').value==='true',sort_order:Number($('sortOrder').value||0)};
+        let result;
+        if(editing){result=await client.from('products').update(payload).eq('id',editing.id);}else{result=await client.from('products').insert(payload);}
+        if(result.error) throw result.error;
+        closeForm(); await loadProducts();
+      }catch(err){$('formError').textContent=err.message;}finally{$('saveBtn').disabled=false;$('saveBtn').textContent='Salvar produto';}
+    });
+
+    async function deleteProduct(id){
+      const p=products.find(x=>String(x.id)===String(id)); if(!p) return; if(!confirm(`Excluir “${p.name}”?`)) return;
+      const {error}=await client.from('products').delete().eq('id',id); if(error){setStatus(error.message,true);return;} await loadProducts();
+    }
+    boot();
+  </script>
+</body>
+</html>
