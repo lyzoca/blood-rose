@@ -70,9 +70,6 @@
         <span class="cart-label">Carrinho</span>
         <span class="cart-badge" id="cartBadge">0</span>
       </button>
-      <button id="themeBtn" class="theme-btn" type="button" aria-label="Alternar tema">
-        🌙 Tema
-      </button>
       <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -468,6 +465,7 @@
                  placeholder="00000-000"
                  maxlength="9" required>
           <small id="cepError" class="field-error"></small>
+          <small id="cepStatus" class="cep-status" role="status" aria-live="polite"></small>
         </div>
 
         <!-- Endereço -->

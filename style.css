@@ -346,19 +346,6 @@ button { cursor: none; }
   position: relative;
 }
 .cart-btn:hover { background: var(--blood); border-color: var(--blood-bright); color: #fff; }
-.theme-btn {
-  background: transparent;
-  border: 1px solid rgba(139,0,0,0.45);
-  border-radius: var(--radius-sm);
-  color: var(--parchment);
-  padding: 0.38rem 0.75rem;
-  font-family: var(--ff-heading);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  transition: all 0.22s;
-}
-.theme-btn:hover { background: var(--blood); border-color: var(--blood-bright); color: #fff; }
 .cart-badge {
   background: var(--blood-bright);
   color: #fff;
@@ -1613,25 +1600,15 @@ button { cursor: none; }
   min-height: 16px;
 }
 
-/* TEMA CLARO */
-body.tema-claro {
-  background: #f5f2f4;
-  color: #1a1619;
+.cep-status {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
 }
+.cep-status.loading { color: #c9b89b; }
+.cep-status.success { color: #9be7a5; }
+.cep-status.error { color: #ff9b9b; }
 
-body.tema-claro .navbar,
-body.tema-claro .navbar.scrolled {
-  background: #ffffff;
-}
-
-body.tema-claro .product-card {
-  background: #ffffff;
-}
-
-body.tema-claro .theme-btn {
-  background: #1a1619;
-  color: #ffffff;
-}
 /* TELA DE CARREGAMENTO */
 #loadingScreen {
   position: fixed;

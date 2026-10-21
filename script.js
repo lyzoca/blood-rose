@@ -386,23 +386,8 @@ const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
 const wishlistHas = id => wishlist.some(item => String(item) === String(id));
 
-// TEMA COM LOCALSTORAGE
-const themeBtn = $('themeBtn');
-const temaSalvo = localStorage.getItem('tema');
-
-if (temaSalvo === 'claro') {
-  document.body.classList.add('tema-claro');
-}
-
-if (themeBtn) {
-  themeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('tema-claro');
-    localStorage.setItem(
-      'tema',
-      document.body.classList.contains('tema-claro') ? 'claro' : 'escuro'
-    );
-  });
-}
+// Remove somente a prefer�ncia antiga de tema; os demais dados permanecem intactos.
+localStorage.removeItem('tema');
 
 /* ════════════════
    LOADER
@@ -931,26 +916,89 @@ $('checkoutPhone').addEventListener('input', function () {
 });
 
 
-// CEP
-$('checkoutCep').addEventListener('input', function () {
-  const cep = this.value;
+// CEP e consulta de endereço via ViaCEP
+let cepEmConsulta = '';
+let ultimaConsultaCep = '';
 
-  // Verifica se existem letras
-  if (/[A-Za-zÀ-ÿ]/.test(cep)) {
+async function consultarCep(cep) {
+  const status = $('cepStatus');
+  const campoEndereco = $('checkoutAddress');
+
+  if (cepEmConsulta === cep || ultimaConsultaCep === cep) return;
+
+  cepEmConsulta = cep;
+  ultimaConsultaCep = cep;
+  status.className = 'cep-status loading';
+  status.textContent = '⏳ Consultando endereço...';
+  campoEndereco.disabled = true;
+
+  try {
+    const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    if (!resposta.ok) throw new Error('Falha na consulta do CEP.');
+    const dados = await resposta.json();
+
+    if (cepEmConsulta !== cep) return;
+
+    if (dados.erro) {
+      status.className = 'cep-status error';
+      status.textContent = '⚠️ CEP não encontrado. Verifique o número digitado.';
+      return;
+    }
+
+    const endereco = [dados.logradouro, dados.bairro, dados.localidade, dados.uf]
+      .filter(Boolean)
+      .join(', ');
+    if (endereco) {
+      campoEndereco.value = endereco;
+      $('addressError').textContent = '';
+    }
+    status.className = 'cep-status success';
+    status.textContent = '✓ Endereço encontrado!';
+  } catch (erro) {
+    if (cepEmConsulta !== cep) return;
+    ultimaConsultaCep = '';
+    status.className = 'cep-status error';
+    status.textContent = '⚠️ Não foi possível consultar o CEP. Tente novamente.';
+  } finally {
+    if (cepEmConsulta === cep) {
+      cepEmConsulta = '';
+      campoEndereco.disabled = false;
+    }
+  }
+}
+
+$('checkoutCep').addEventListener('input', function () {
+  const valor = this.value;
+  const numeros = valor.replace(/\D/g, '');
+
+  // Mantém a validação existente para letras.
+  if (/[A-Za-zÀ-ÿ]/.test(valor)) {
     $('cepError').textContent =
       '⚠️ O CEP deve conter apenas números.';
+    $('cepStatus').textContent = '';
+    $('cepStatus').className = 'cep-status';
+    ultimaConsultaCep = '';
     return;
   }
-
-  // Verifica a quantidade de números
-  const numeros = cep.replace(/\D/g, '');
 
   if (numeros.length > 0 && numeros.length < 8) {
     $('cepError').textContent =
       '⚠️ O CEP deve ter 8 números.';
-  } else {
-    $('cepError').textContent = '';
+    $('cepStatus').textContent = '';
+    $('cepStatus').className = 'cep-status';
+    ultimaConsultaCep = '';
+    return;
   }
+
+  $('cepError').textContent = '';
+  if (numeros.length !== 8) {
+    $('cepStatus').textContent = '';
+    $('cepStatus').className = 'cep-status';
+    ultimaConsultaCep = '';
+    return;
+  }
+
+  consultarCep(numeros);
 });
 
 
